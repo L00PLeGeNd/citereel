@@ -7,10 +7,6 @@ Not another knowledge-base chatbot. CiteReel records retrieval → generation �
 [![ci](https://github.com/L00PLeGeNd/citereel/actions/workflows/ci.yml/badge.svg)](https://github.com/L00PLeGeNd/citereel/actions/workflows/ci.yml)
 [![PyPI](https://img.shields.io/pypi/v/citereel.svg)](https://pypi.org/project/citereel/)
 
-<p align="center">
-  <img src="docs/sample_run.png" alt="citereel HTML run: answer with [1] citation, linked chunks, retrieve/generate timeline" width="720" />
-</p>
-
 <p align="center"><em>Real offline demo run — branded inspect view with clickable <code>[n]</code>, evidence chunks, and retrieve → generate timeline.</em></p>
 ## Why it exists
 
