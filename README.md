@@ -11,8 +11,7 @@ Not another knowledge-base chatbot. CiteReel records retrieval → generation �
   <img src="docs/sample_run.png" alt="citereel HTML run: answer with [1] citation, linked chunks, retrieve/generate timeline" width="720" />
 </p>
 
-<p align="center"><em>Real offline demo run — clickable <code>[n]</code>, source chunks, retrieve/generate timeline.</em></p>
-
+<p align="center"><em>Real offline demo run — branded inspect view with clickable <code>[n]</code>, evidence chunks, and retrieve → generate timeline.</em></p>
 ## Why it exists
 
 When you change a retriever, prompt, model, or chunking strategy, you need more than “the answer looks better.” CiteReel helps you answer:
