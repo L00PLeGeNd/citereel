@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "id": "demo-refund",
+  "description": "Fixed offline suite for the bundled customer handbook. Reproducible without API keys.",
+  "docs": null,
+  "cases": [
+    {
+      "id": "refund-window",
+      "query": "What is the refund window?",
+      "gold_answer_contains": ["14"],
+      "gold_evidence_contains": ["14"],
+      "expect_citations": true,
+      "expect_evidence_ok": true,
+      "notes": "Happy path: answer and evidence must mention 14 days."
+    },
+    {
+      "id": "shipping-days",
+      "query": "How long does standard shipping take?",
+      "gold_answer_contains": ["3"],
+      "gold_evidence_contains": ["business"],
+      "expect_citations": true,
+      "expect_evidence_ok": true,
+      "notes": "Retrieval should surface the shipping paragraph."
+    },
+    {
+      "id": "unsupported-warranty-years",
+      "query": "Is there a 10-year hardware warranty?",
+      "forbid_answer_contains": ["10-year", "10 year", "10 years"],
+      "expect_evidence_ok": true,
+      "notes": "Docs never mention a 10-year warranty; the answer must not invent that claim."
+    }
+  ]
+}

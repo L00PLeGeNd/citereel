@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>citereel</title>
+  <style>
+    :root {
+      --ink: #1a1a1a;
+      --muted: #6a6560;
+      --paper: #f7f5f1;
+      --card: #fffcf7;
+      --line: #e4dfd6;
+      --accent: #0b57d0;
+      --ok: #1f6b3a;
+      --warn: #8a5a00;
+    }
+    * { box-sizing: border-box; }
+    html, body { height: 100%; margin: 0; }
+    body {
+      font-family: "Segoe UI", system-ui, sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(1200px 500px at 10% -10%, #efe8dc 0%, transparent 55%),
+        radial-gradient(900px 400px at 100% 0%, #e8eef6 0%, transparent 50%),
+        var(--paper);
+      line-height: 1.45;
+    }
+    @media (prefers-reduced-motion: no-preference) {
+      body { animation: wash 18s ease-in-out infinite alternate; }
+      @keyframes wash {
+        from { background-position: 0 0, 0 0, 0 0; }
+        to { background-position: 2% 1%, -2% 0, 0 0; }
+      }
+      .enter { animation: rise 0.55s ease both; }
+      @keyframes rise {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: none; }
+      }
+      .busy::after {
+        content: "";
+        display: inline-block;
+        width: 0.55rem; height: 0.55rem; margin-left: 0.45rem;
+        border-radius: 50%; background: var(--accent);
+        animation: pulse 0.9s ease-in-out infinite;
+      }
+      @keyframes pulse { 50% { opacity: 0.25; transform: scale(0.85); } }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      * { animation: none !important; transition: none !important; }
+    }
+    .wrap { max-width: 880px; margin: 0 auto; padding: 1.25rem 1.1rem 2.5rem; }
+    header { margin-bottom: 1.1rem; }
+    h1 { font-size: 1.45rem; letter-spacing: -0.03em; margin: 0 0 0.25rem; }
+    .sub { color: var(--muted); font-size: 0.92rem; }
+    .panel {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 1rem 1.05rem;
+      margin-bottom: 0.9rem;
+      box-shadow: 0 10px 30px rgba(40, 30, 10, 0.04);
+    }
+    label { display: block; font-size: 0.78rem; color: var(--muted); margin: 0.55rem 0 0.28rem; }
+    input, select, textarea {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 7px;
+      padding: 0.55rem 0.65rem;
+      font: inherit;
+      background: #fff;
+      color: var(--ink);
+    }
+    textarea { min-height: 4.2rem; resize: vertical; }
+    .row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.65rem; }
+    @media (max-width: 640px) { .row { grid-template-columns: 1fr; } }
+    .actions { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.85rem; }
+    button {
+      border: 1px solid var(--ink);
+      background: var(--ink);
+      color: #fff;
+      border-radius: 999px;
+      padding: 0.5rem 1rem;
+      font: inherit;
+      cursor: pointer;
+    }
+    button.secondary { background: transparent; color: var(--ink); }
+    button:disabled { opacity: 0.5; cursor: wait; }
+    .answer {
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 1.05rem;
+      white-space: pre-wrap;
+    }
+    a.cite {
+      color: var(--accent);
+      font-weight: 700;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    a.cite:hover { text-decoration: underline; }
+    .cite-card {
+      border-top: 1px solid var(--line);
+      padding: 0.75rem 0;
+      scroll-margin-top: 1rem;
+    }
+    .cite-card:target, .cite-card.active { background: #fff6d6; }
+    .cite-card h3 { margin: 0 0 0.35rem; font-size: 0.95rem; }
+    .cite-card pre {
+      margin: 0;
+      white-space: pre-wrap;
+      font-family: ui-monospace, Consolas, monospace;
+      font-size: 0.86rem;
+    }
+    .meta { color: var(--muted); font-size: 0.85rem; margin-bottom: 0.6rem; }
+    .err { color: #9b1c1c; white-space: pre-wrap; }
+    .status { min-height: 1.2rem; color: var(--muted); font-size: 0.86rem; }
+    .hidden { display: none; }
+  </style>
+</head>
+<body>
+  <div class="wrap enter">
+    <header>
+      <h1>citereel</h1>
+      <div class="sub">Ask local docs · click [n] · jump to the chunk</div>
+    </header>
+
+    <section class="panel">
+      <label for="query">Question</label>
+      <textarea id="query" placeholder="What is the refund window?">What is the refund window?</textarea>
+
+      <label for="docs">Docs folder</label>
+      <input id="docs" type="text" placeholder="Leave empty for bundled demo docs" />
+
+      <div class="row">
+        <div>
+          <label for="generator">Generator</label>
+          <select id="generator">
+            <option value="auto">auto</option>
+            <option value="offline" selected>offline</option>
+            <option value="openai">openai-compatible</option>
+          </select>
+        </div>
+        <div>
+          <label for="provider">Provider</label>
+          <select id="provider">
+            <option value="">(default)</option>
+            <option value="deepseek">deepseek</option>
+            <option value="openai">openai</option>
+            <option value="ollama">ollama</option>
+            <option value="moonshot">moonshot</option>
+            <option value="groq">groq</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="row">
+        <div>
+          <label for="model">Model (optional)</label>
+          <input id="model" type="text" placeholder="e.g. deepseek-flash" />
+        </div>
+        <div>
+          <label for="k">Top-k</label>
+          <input id="k" type="number" min="1" max="10" value="3" />
+        </div>
+      </div>
+
+      <div class="actions">
+        <button id="askBtn" type="button">Ask</button>
+        <button id="demoBtn" class="secondary" type="button">Use demo docs</button>
+        <button id="saveBtn" class="secondary" type="button" disabled>Save run.json</button>
+      </div>
+      <div id="status" class="status"></div>
+    </section>
+
+    <section id="result" class="panel hidden">
+      <div id="meta" class="meta"></div>
+      <div class="sub" style="margin-bottom:0.35rem">Answer</div>
+      <div id="answer" class="answer"></div>
+      <div class="sub" style="margin:1rem 0 0.35rem">Citations</div>
+      <div id="cites"></div>
+    </section>
+    <section id="error" class="panel hidden"><div class="err" id="errorText"></div></section>
+  </div>
+
+  <script>
+    const $ = (id) => document.getElementById(id);
+    let lastRun = null;
+
+    $("demoBtn").onclick = () => {
+      $("docs").value = "";
+      $("query").value = "What is the refund window?";
+      $("generator").value = "offline";
+    };
+
+    $("askBtn").onclick = async () => {
+      $("error").classList.add("hidden");
+      $("result").classList.add("hidden");
+      $("askBtn").disabled = true;
+      $("status").textContent = "working";
+      $("status").classList.add("busy");
+      try {
+        const payload = {
+          query: $("query").value.trim(),
+          docs: $("docs").value.trim(),
+          generator: $("generator").value,
+          provider: $("provider").value || null,
+          model: $("model").value.trim() || null,
+          k: Number($("k").value || 3),
+        };
+        const res = await fetch("/api/ask", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || "request failed");
+        lastRun = data.run;
+        renderRun(lastRun);
+        $("saveBtn").disabled = false;
+        $("status").textContent = "done";
+      } catch (err) {
+        $("errorText").textContent = String(err.message || err);
+        $("error").classList.remove("hidden");
+        $("status").textContent = "failed";
+      } finally {
+        $("askBtn").disabled = false;
+        $("status").classList.remove("busy");
+      }
+    };
+
+    $("saveBtn").onclick = () => {
+      if (!lastRun) return;
+      const blob = new Blob([JSON.stringify(lastRun, null, 2)], { type: "application/json" });
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = `citereel-${lastRun.id || "run"}.json`;
+      a.click();
+      URL.revokeObjectURL(a.href);
+    };
+
+    function renderRun(run) {
+      $("result").classList.remove("hidden");
+      const bits = [];
+      if (run.meta) {
+        for (const key of ["retriever", "generator", "provider", "model"]) {
+          if (run.meta[key]) bits.push(`${key}=${run.meta[key]}`);
+        }
+      }
+      $("meta").textContent = `run ${run.id || ""}` + (bits.length ? " · " + bits.join(" · ") : "");
+
+      const byId = Object.fromEntries((run.retrieved || []).map((c) => [c.id, c]));
+      $("answer").innerHTML = linkify(run.answer || "");
+      $("cites").innerHTML = (run.citations || []).map((cite) => {
+        const chunk = byId[cite.chunk_id] || {};
+        return `<div class="cite-card" id="cite-${cite.n}">
+          <h3>[${cite.n}] ${escapeHtml(chunk.source || "?")} <code>${escapeHtml(cite.chunk_id)}</code></h3>
+          <pre>${escapeHtml(chunk.text || "")}</pre>
+        </div>`;
+      }).join("");
+
+      $("answer").querySelectorAll("a.cite").forEach((a) => {
+        a.addEventListener("click", (e) => {
+          e.preventDefault();
+          const id = a.getAttribute("href").slice(1);
+          const el = document.getElementById(id);
+          if (!el) return;
+          document.querySelectorAll(".cite-card").forEach((c) => c.classList.remove("active"));
+          el.classList.add("active");
+          el.scrollIntoView({ behavior: "smooth", block: "nearest" });
+        });
+      });
+    }
+
+    function linkify(text) {
+      return escapeHtml(text).replace(/\[(\d+)\]/g, '<a class="cite" href="#cite-$1">[$1]</a>');
+    }
+    function escapeHtml(s) {
+      return String(s)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+    }
+  </script>
+</body>
+</html>

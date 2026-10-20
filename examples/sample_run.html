@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>citereel · fb58adb3a756</title>
+  <style>
+    body { font-family: Georgia, "Times New Roman", serif; max-width: 720px; margin: 2rem auto; padding: 0 1rem; line-height: 1.5; color: #1a1a1a; background: #faf9f7; }
+    h1, h2, h3 { font-family: "Segoe UI", system-ui, sans-serif; font-weight: 650; }
+    h1 { letter-spacing: -0.02em; }
+    .meta { color: #555; font-size: 0.95rem; }
+    .answer { background: #fff; border: 1px solid #e6e2da; padding: 1rem 1.1rem; border-radius: 4px; }
+    .cite { border-top: 1px solid #ddd; padding: 1rem 0; scroll-margin-top: 1rem; }
+    .cite:target { background: #fff6d6; outline: 1px solid #e6d69a; }
+    .chunk-id { margin: 0.25rem 0 0.5rem; color: #666; font-size: 0.85rem; }
+    pre { white-space: pre-wrap; font-family: ui-monospace, Consolas, monospace; font-size: 0.9rem; }
+    a.cite-ref { text-decoration: none; font-weight: 700; color: #0b57d0; }
+    .timeline { list-style: none; padding: 0; margin: 0; }
+    .timeline li { position: relative; padding: 0.75rem 0 0.75rem 1.4rem; border-left: 2px solid #cfc8bb; margin-left: 0.4rem; }
+    .timeline li::before { content: ""; position: absolute; left: -0.4rem; top: 1.05rem; width: 0.65rem; height: 0.65rem; border-radius: 50%; background: #1a1a1a; }
+    .step-type { font-family: "Segoe UI", system-ui, sans-serif; font-weight: 650; }
+    .step-ms { color: #666; font-size: 0.9rem; }
+    .step-detail { margin: 0.35rem 0 0; color: #444; font-size: 0.9rem; }
+    .step-detail code { background: #eeeae3; padding: 0.1rem 0.3rem; border-radius: 3px; }
+  </style>
+</head>
+<body>
+  <h1>citereel</h1>
+  <p class="meta"><strong>Run</strong> fb58adb3a756 · retriever=embedding · generator=offline</p>
+  <h2>Query</h2>
+  <p>What is the refund window?</p>
+  <h2>Answer</h2>
+  <div class="answer">Based on the retrieved docs: The refund window is **14 days** from purchase. Customers may request a full refund in that window if the product has not been activated. <a class="cite-ref" href="#cite-1">[1]</a> See also <a class="cite-ref" href="#cite-2">[2]</a>.</div>
+  <h2>Citations</h2>
+  <section id="cite-1" class="cite"><h3>[1] handbook.md</h3><p class="chunk-id"><code>handbook.md#3</code></p><pre>The refund window is **14 days** from purchase. Customers may request a full refund in that window if the product has not been activated.</pre></section><section id="cite-2" class="cite"><h3>[2] handbook.md</h3><p class="chunk-id"><code>handbook.md#4</code></p><pre>Requests filed after the window closes are reviewed case by case. Approved late requests usually receive store credit rather than cash.</pre></section>
+  <h2>Timeline</h2>
+  <ol class="timeline"><li><span class='step-type'>1. retrieve</span> <span class='step-ms'>4.97 ms</span><div class='step-detail'><code>k=3</code> <code>chunk_ids=[&#x27;handbook.md#3&#x27;, &#x27;handbook.md#4&#x27;]</code> <code>backend=embedding</code> <code>embedder=HashingEmbedder</code> <code>top_score=0.7949</code></div></li><li><span class='step-type'>2. generate</span> <span class='step-ms'>0.06 ms</span><div class='step-detail'><code>mode=offline</code> <code>query=What is the refund window?</code></div></li></ol>
+</body>
+</html>
