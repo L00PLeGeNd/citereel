@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <title>citereel · fb58adb3a756</title>
+  <title>citereel · 77afd468bcc4</title>
   <style>
     body { font-family: Georgia, "Times New Roman", serif; max-width: 720px; margin: 2rem auto; padding: 0 1rem; line-height: 1.5; color: #1a1a1a; background: #faf9f7; }
     h1, h2, h3 { font-family: "Segoe UI", system-ui, sans-serif; font-weight: 650; }
@@ -25,14 +25,14 @@
 </head>
 <body>
   <h1>citereel</h1>
-  <p class="meta"><strong>Run</strong> fb58adb3a756 · retriever=embedding · generator=offline</p>
+  <p class="meta"><strong>Run</strong> 77afd468bcc4 · retriever=embedding · generator=offline</p>
   <h2>Query</h2>
   <p>What is the refund window?</p>
   <h2>Answer</h2>
-  <div class="answer">Based on the retrieved docs: The refund window is **14 days** from purchase. Customers may request a full refund in that window if the product has not been activated. <a class="cite-ref" href="#cite-1">[1]</a> See also <a class="cite-ref" href="#cite-2">[2]</a>.</div>
+  <div class="answer">The refund window is **14 days** from purchase. <a class="cite-ref" href="#cite-1">[1]</a></div>
   <h2>Citations</h2>
   <section id="cite-1" class="cite"><h3>[1] handbook.md</h3><p class="chunk-id"><code>handbook.md#3</code></p><pre>The refund window is **14 days** from purchase. Customers may request a full refund in that window if the product has not been activated.</pre></section><section id="cite-2" class="cite"><h3>[2] handbook.md</h3><p class="chunk-id"><code>handbook.md#4</code></p><pre>Requests filed after the window closes are reviewed case by case. Approved late requests usually receive store credit rather than cash.</pre></section>
   <h2>Timeline</h2>
-  <ol class="timeline"><li><span class='step-type'>1. retrieve</span> <span class='step-ms'>4.97 ms</span><div class='step-detail'><code>k=3</code> <code>chunk_ids=[&#x27;handbook.md#3&#x27;, &#x27;handbook.md#4&#x27;]</code> <code>backend=embedding</code> <code>embedder=HashingEmbedder</code> <code>top_score=0.7949</code></div></li><li><span class='step-type'>2. generate</span> <span class='step-ms'>0.06 ms</span><div class='step-detail'><code>mode=offline</code> <code>query=What is the refund window?</code></div></li></ol>
+  <ol class="timeline"><li><span class='step-type'>1. retrieve</span> <span class='step-ms'>6.18 ms</span><div class='step-detail'><code>k=3</code> <code>chunk_ids=[&#x27;handbook.md#3&#x27;, &#x27;handbook.md#4&#x27;]</code> <code>backend=embedding</code> <code>embedder=HashingEmbedder</code> <code>top_score=0.8564</code> <code>cache_hit=False</code></div></li><li><span class='step-type'>2. generate</span> <span class='step-ms'>0.19 ms</span><div class='step-detail'><code>mode=offline</code> <code>query=What is the refund window?</code></div></li></ol>
 </body>
 </html>

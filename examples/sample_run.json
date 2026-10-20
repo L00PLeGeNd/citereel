@@ -1,21 +1,25 @@
 {
-  "schema_version": 1,
-  "id": "fb58adb3a756",
-  "created_at": 1792477540.8162267,
+  "schema_version": 2,
+  "id": "77afd468bcc4",
+  "created_at": 1792484951.927126,
   "query": "What is the refund window?",
   "retrieved": [
     {
       "id": "handbook.md#3",
       "source": "handbook.md",
-      "text": "The refund window is **14 days** from purchase. Customers may request a full refund in that window if the product has not been activated."
+      "text": "The refund window is **14 days** from purchase. Customers may request a full refund in that window if the product has not been activated.",
+      "start_char": 33,
+      "end_char": 170
     },
     {
       "id": "handbook.md#4",
       "source": "handbook.md",
-      "text": "Requests filed after the window closes are reviewed case by case. Approved late requests usually receive store credit rather than cash."
+      "text": "Requests filed after the window closes are reviewed case by case. Approved late requests usually receive store credit rather than cash.",
+      "start_char": 172,
+      "end_char": 307
     }
   ],
-  "answer": "Based on the retrieved docs: The refund window is **14 days** from purchase. Customers may request a full refund in that window if the product has not been activated. [1] See also [2].",
+  "answer": "The refund window is **14 days** from purchase. [1]",
   "citations": [
     {
       "n": 1,
@@ -29,7 +33,7 @@
   "steps": [
     {
       "type": "retrieve",
-      "ms": 4.97,
+      "ms": 6.18,
       "detail": {
         "k": 3,
         "chunk_ids": [
@@ -38,12 +42,13 @@
         ],
         "backend": "embedding",
         "embedder": "HashingEmbedder",
-        "top_score": 0.7949
+        "top_score": 0.8564,
+        "cache_hit": false
       }
     },
     {
       "type": "generate",
-      "ms": 0.06,
+      "ms": 0.19,
       "detail": {
         "mode": "offline",
         "query": "What is the refund window?"
@@ -52,6 +57,19 @@
   ],
   "meta": {
     "retriever": "embedding",
-    "generator": "offline"
+    "generator": "offline",
+    "corpus_chunks": 17,
+    "assist_mode": "human_review",
+    "config": {
+      "k": 3,
+      "retriever": "embedding",
+      "generator": "offline",
+      "chunk_strategy": "paragraph",
+      "docs_dir": "C:\\Users\\Ibiza\\Desktop\\IT\\citereel\\src\\citereel\\bundled\\demo_docs"
+    },
+    "docs_fingerprint": "b90f4cc653deb72d90fc438ddc96405812b7c103897bcf61fa3cf8048e271720",
+    "replay_mode": "offline",
+    "retrieved_sha256": "7a0ef1d5384f947a77bd8420c9b4f129ce4b29e0cb6e02664b5c3e15e9fd53ae",
+    "validation_ok": true
   }
 }

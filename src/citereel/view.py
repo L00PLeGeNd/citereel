@@ -21,7 +21,7 @@ def render_home(*, version: str) -> None:
     console.print()
     console.print(f"[bold cyan]citereel[/bold cyan]  [dim]v{safe_str(version)}[/dim]")
     console.print(
-        "[dim]verifiable RAG runs: cite · check evidence · eval configs · compare[/dim]"
+        "[dim]why did RAG answer that? cite · evidence · eval configs · compare[/dim]"
     )
     console.print()
     console.print("[bold]start[/bold]  [dim](same on PowerShell / cmd / bash / zsh)[/dim]")

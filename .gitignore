@@ -17,6 +17,8 @@ venv/
 *.json
 !examples/**/*.json
 !src/citereel/bundled/**/*.json
+!docs/**/*.json
+examples/eval_out/
 .DS_Store
 .idea/
 .vscode/
