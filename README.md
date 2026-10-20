@@ -7,6 +7,8 @@ Not another knowledge-base chatbot. CiteReel records retrieval → generation �
 [![ci](https://github.com/L00PLeGeNd/citereel/actions/workflows/ci.yml/badge.svg)](https://github.com/L00PLeGeNd/citereel/actions/workflows/ci.yml)
 [![PyPI](https://img.shields.io/pypi/v/citereel.svg)](https://pypi.org/project/citereel/)
 
+**Docs:** [Usage guide](docs/USAGE.md) · [Enterprise notes](docs/ENTERPRISE.md)
+
 ## Why it exists
 
 When you change a retriever, prompt, model, or chunking strategy, you need more than “the answer looks better.” CiteReel helps you answer:
@@ -41,6 +43,8 @@ flowchart LR
 | Diff / eval | answer · cites · retrieved | Reproducible suite reports and regressions |
 
 ## Quick start
+
+Full walkthrough (install → demo → ask → check → eval → GUI): **[Usage guide](docs/USAGE.md)**.
 
 ```bash
 pip install citereel
