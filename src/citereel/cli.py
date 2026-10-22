@@ -6,6 +6,7 @@ from typing import Callable, Optional, TypeVar
 import typer
 
 from citereel import __version__
+from citereel.catch_demo import build_catch_run
 from citereel.diff import diff_runs, format_diff
 from citereel.generate.providers import format_providers_help
 from citereel.html import render_html
@@ -35,7 +36,7 @@ app = typer.Typer(
     help=(
         "Verifiable RAG run records: cite, check evidence, eval configs, compare. "
         "Short cmds (PowerShell/cmd/bash/zsh): "
-        "a ask | e eval | c check | df diff | g gui | d demo | r replay"
+        "x catch | a ask | e eval | c check | df diff | g gui | d demo | r replay"
     ),
 )
 console = get_console()
@@ -301,6 +302,45 @@ def gui_command(
     from citereel.gui import run_gui
 
     run_gui(host=host, port=port)
+
+
+@_cmds("catch", "x")
+def catch_command(
+    out: Path = typer.Option(
+        Path("catch_run.json"),
+        "--out",
+        "-o",
+        help="Where to write the crafted bad run",
+    ),
+) -> None:
+    """30s wow: structure-valid [1] that evidence check still fails (no API key)."""
+    run = build_catch_run()
+    out.parent.mkdir(parents=True, exist_ok=True)
+    run.save(str(out))
+    console.print()
+    console.print("[bold]catch[/bold]  [dim]structure-looking cite, wrong number[/dim]")
+    console.print(f"[dim]answer[/dim]  {safe_str(run.answer)}")
+    console.print(f"[dim]chunk[/dim]   {safe_str(run.retrieved[0].text[:120])}…")
+    console.print()
+    structure = validate_run(run, evidence=False)
+    evidence = validate_run(run, evidence=True)
+    if structure.ok:
+        console.print("[green]structure[/green]  ok  (citation [1] maps to a real chunk)")
+    else:
+        console.print("[red]structure[/red]  fail")
+        for err in structure.errors:
+            console.print(f"  - {safe_str(err)}")
+    if evidence.ok:
+        console.print("[yellow]evidence[/yellow]  ok  (unexpected for this demo)")
+    else:
+        console.print("[red]evidence[/red]  fail  ← this is the point")
+        for err in evidence.evidence_errors:
+            console.print(f"  - {safe_str(err)}")
+    console.print()
+    console.print(f"[dim]saved[/dim]  {safe_str(out.resolve())}")
+    render_next_steps(f"citereel s 1 {out}", f"citereel c {out} -E", "citereel e")
+    if not evidence.ok:
+        raise typer.Exit(code=1)
 
 
 @_cmds("demo", "d")

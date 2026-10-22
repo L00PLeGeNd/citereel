@@ -4,6 +4,7 @@ Short commands work the same on PowerShell, cmd, bash, and zsh:
 
 | Short | Full | Purpose |
 |-------|------|---------|
+| `x` | `catch` | 30s demo: structure-ok cite that evidence still fails |
 | `a` | `ask` | Run RAG over docs → `run.json` |
 | `d` | `demo` | Bundled refund-window demo |
 | `s` | `show` | Jump to citation `[n]` |
@@ -38,6 +39,14 @@ pip install -e ".[llm,gui]"
 ---
 
 ## 2. Five-minute demo (no API key)
+
+Start here if you only have 30 seconds:
+
+```bash
+citereel x                     # structure ok, evidence fail (wrong number)
+```
+
+Full happy-path demo:
 
 ```bash
 citereel d -g offline          # write sample run (examples/ or cwd)
@@ -98,13 +107,28 @@ citereel r run.json            # replay offline (no LLM call)
 citereel df run_a.json run_b.json
 ```
 
-Diff highlights answer, citations, and retrieved chunk changes between two recorded runs.
+Every `run.json` stores a **config snapshot** for reproducibility: retriever, generator, embedder, `k`, chunk strategy, `max_chunk_chars`, model/provider/`base_url` (when used), `citereel_version`, plus `docs_fingerprint` of the corpus.
+
+`citereel r` prints those fields in a one-line banner. `citereel df` reports config / docs fingerprint / citation / retrieved deltas.
 
 ---
 
 ## 6. Eval suite (compare configs)
 
-Minimal suite JSON:
+The bundled `demo-refund` suite has **10 cases** (refunds, shipping, FAQ, plus an unsupported-claim check). No API key required.
+
+```bash
+# bundled demo suite (no path needed)
+citereel e -n offline-emb -g offline -o ./eval_out
+
+# change one knob, compare to a prior report
+citereel e -n offline-kw -R keyword -g offline -o ./eval_out2 \
+  -A ./eval_out/report__offline-emb.json
+```
+
+Reports print **pass count + %**, total latency, per-case ok/FAIL with failure kinds, and a compare block (`regressions` / `improvements`).
+
+Minimal custom suite JSON:
 
 ```json
 {
@@ -124,15 +148,7 @@ Minimal suite JSON:
 ```
 
 ```bash
-# bundled demo suite (no path needed)
-citereel e -n offline-emb -g offline -o ./eval_out
-
-# your suite
 citereel e path/to/suite.json -n my-config -g offline -o ./out
-
-# change one knob, compare to a prior report
-citereel e path/to/suite.json -n offline-kw -R keyword -o ./out2 \
-  -A ./out/report__my-config.json
 ```
 
 Each case writes a run under `-o`; the report JSON is what `-A` compares against.

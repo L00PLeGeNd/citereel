@@ -6,9 +6,11 @@ from typing import Any
 
 from citereel.generate import Generator, build_generator
 from citereel.ingest import chunk_strategy, load_docs
+from citereel.limits import max_chunk_chars
 from citereel.models import CURRENT_SCHEMA_VERSION, Chunk, Run
 from citereel.retrieve import Retriever, build_retriever
 from citereel.validate import retrieved_fingerprint, validate_run
+from citereel.version import __version__
 
 
 def ask(
@@ -39,10 +41,14 @@ def ask(
         "retriever": retrieve_step.detail.get("backend", type(resolved_retriever).__name__),
         "generator": generate_step.detail.get("mode", type(resolved_generator).__name__),
         "chunk_strategy": chunk_strategy(),
-        "docs_dir": str(Path(docs_dir)),
+        "max_chunk_chars": max_chunk_chars(),
+        "citereel_version": __version__,
+        "docs_dir": str(Path(docs_dir).resolve()),
     }
-    for key in ("model", "provider"):
-        if key in generate_step.detail:
+    if retrieve_step.detail.get("embedder"):
+        config["embedder"] = retrieve_step.detail["embedder"]
+    for key in ("model", "provider", "base_url"):
+        if generate_step.detail.get(key):
             config[key] = generate_step.detail[key]
     meta: dict[str, Any] = {
         "retriever": config["retriever"],
@@ -52,10 +58,11 @@ def ask(
         "config": config,
         "docs_fingerprint": corpus_fingerprint(corpus),
         "replay_mode": "offline",
+        "citereel_version": __version__,
     }
-    for key in ("model", "provider"):
-        if key in generate_step.detail:
-            meta[key] = generate_step.detail[key]
+    for key in ("model", "provider", "base_url", "embedder"):
+        if key in config:
+            meta[key] = config[key]
     run = Run(
         query=query,
         retrieved=hits,

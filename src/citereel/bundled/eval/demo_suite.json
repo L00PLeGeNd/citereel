@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "id": "demo-refund",
-  "description": "Fixed offline suite for the bundled customer handbook. Reproducible without API keys.",
+  "description": "Fixed offline suite over the bundled customer handbook + FAQ. Reproducible without API keys; use to compare retrievers/generators.",
   "docs": null,
   "cases": [
     {
@@ -14,6 +14,24 @@
       "notes": "Happy path: answer and evidence must mention 14 days."
     },
     {
+      "id": "late-refund-credit",
+      "query": "What do late refund requests usually receive?",
+      "gold_answer_contains": ["credit"],
+      "gold_evidence_contains": ["credit"],
+      "expect_citations": true,
+      "expect_evidence_ok": true,
+      "notes": "Late requests usually get store credit."
+    },
+    {
+      "id": "activated-not-refundable",
+      "query": "Are activated licenses refundable after the first successful login?",
+      "gold_answer_contains": ["not refundable"],
+      "gold_evidence_contains": ["not refundable"],
+      "expect_citations": true,
+      "expect_evidence_ok": true,
+      "notes": "Activated licenses / gift cards / promo bundles are not refundable after first login."
+    },
+    {
       "id": "shipping-days",
       "query": "How long does standard shipping take?",
       "gold_answer_contains": ["3"],
@@ -21,6 +39,51 @@
       "expect_citations": true,
       "expect_evidence_ok": true,
       "notes": "Retrieval should surface the shipping paragraph."
+    },
+    {
+      "id": "damaged-shipment-window",
+      "query": "How soon must damaged shipments be reported?",
+      "gold_answer_contains": ["48"],
+      "gold_evidence_contains": ["48"],
+      "expect_citations": true,
+      "expect_evidence_ok": true,
+      "notes": "Damaged shipments: 48 hours with a photo."
+    },
+    {
+      "id": "expedited-shipping",
+      "query": "Is expedited shipping available at checkout?",
+      "gold_answer_contains": ["Expedited"],
+      "gold_evidence_contains": ["Expedited"],
+      "expect_citations": true,
+      "expect_evidence_ok": true,
+      "notes": "Expedited shipping is available at checkout."
+    },
+    {
+      "id": "student-discount",
+      "query": "What discount do verified students get?",
+      "gold_answer_contains": ["20%"],
+      "gold_evidence_contains": ["20%"],
+      "expect_citations": true,
+      "expect_evidence_ok": true,
+      "notes": "Verified students get 20% off annual plans."
+    },
+    {
+      "id": "return-policy-source",
+      "query": "Which document is the source of truth for returns?",
+      "gold_answer_contains": ["source of truth"],
+      "gold_evidence_contains": ["handbook"],
+      "expect_citations": true,
+      "expect_evidence_ok": true,
+      "notes": "FAQ points to the customer handbook Returns chapter."
+    },
+    {
+      "id": "ownership-verify",
+      "query": "What address does support use to verify ownership?",
+      "gold_answer_contains": ["ownership"],
+      "gold_evidence_contains": ["email"],
+      "expect_citations": true,
+      "expect_evidence_ok": true,
+      "notes": "Support uses the order email / that address to verify ownership."
     },
     {
       "id": "unsupported-warranty-years",

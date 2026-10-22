@@ -87,6 +87,7 @@ class OpenAIGenerator:
             model=model,
             provider=provider,
         )
+        self.base_url = base_url or getattr(self._client, "base_url", None)
 
     def generate(
         self,
@@ -102,16 +103,19 @@ class OpenAIGenerator:
             answer = sanitize_answer(raw, len(retrieved))
             citations = citations_from_answer(answer, retrieved)
         ms = (time.perf_counter() - t0) * 1000
+        detail: dict[str, Any] = {
+            "mode": "openai",
+            "provider": self.provider,
+            "model": self.model,
+            "query": query,
+            "citation_count": len(citations),
+        }
+        if self.base_url:
+            detail["base_url"] = self.base_url
         step = Step(
             type="generate",
             ms=round(ms, 2),
-            detail={
-                "mode": "openai",
-                "provider": self.provider,
-                "model": self.model,
-                "query": query,
-                "citation_count": len(citations),
-            },
+            detail=detail,
         )
         return answer, citations, step
 

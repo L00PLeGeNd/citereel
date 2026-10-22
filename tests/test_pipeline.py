@@ -25,3 +25,26 @@ def test_citation_chunk_ids_exist_in_retrieved() -> None:
     ids = {c.id for c in run.retrieved}
     for cite in run.citations:
         assert cite.chunk_id in ids
+
+
+def test_ask_records_repro_fingerprints() -> None:
+    from citereel import __version__
+
+    run = ask(
+        "What is the refund window?",
+        DOCS,
+        k=3,
+        retriever="embedding",
+        generator="offline",
+    )
+    cfg = run.meta["config"]
+    assert cfg["k"] == 3
+    assert cfg["retriever"] == "embedding"
+    assert cfg["generator"] == "offline"
+    assert cfg["chunk_strategy"] in {"paragraph", "page"}
+    assert cfg["max_chunk_chars"] >= 1
+    assert cfg["citereel_version"] == __version__
+    assert cfg["embedder"]  # e.g. HashingEmbedder
+    assert run.meta["citereel_version"] == __version__
+    assert run.meta["docs_fingerprint"]
+    assert len(run.meta["docs_fingerprint"]) == 64

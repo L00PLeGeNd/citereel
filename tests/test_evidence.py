@@ -70,3 +70,14 @@ def test_validate_structure_passes_but_evidence_flag_catches_refute() -> None:
     with_evidence = validate_run(run, evidence=True)
     assert with_evidence.ok is False
     assert with_evidence.evidence_errors
+
+
+def test_trailing_cite_after_period_still_judged() -> None:
+    """``... purchase. [1]`` must not drop the claim from evidence checks."""
+    run = _run(
+        "The refund window is 90 days from purchase. [1]",
+        "The refund window is 14 days from purchase.",
+    )
+    report = evaluate_evidence(run)
+    assert report.ok is False
+    assert any(j.verdict == "refute" for j in report.judgements)

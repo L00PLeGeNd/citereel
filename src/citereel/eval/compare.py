@@ -70,9 +70,12 @@ def compare_suite_reports(left: SuiteReport, right: SuiteReport) -> ComparisonRe
 
 
 def format_comparison(cmp: ComparisonReport) -> str:
+    left_pct = _pct(cmp.left_passed, cmp.total)
+    right_pct = _pct(cmp.right_passed, cmp.total)
     lines = [
         f"compare  {cmp.left_name} → {cmp.right_name}",
-        f"passed   {cmp.left_passed}/{cmp.total} → {cmp.right_passed}/{cmp.total}",
+        f"passed   {cmp.left_passed}/{cmp.total} ({left_pct}) → "
+        f"{cmp.right_passed}/{cmp.total} ({right_pct})",
         f"latency  {cmp.left_latency_ms:.1f}ms → {cmp.right_latency_ms:.1f}ms",
     ]
     if cmp.regressions:
@@ -90,11 +93,20 @@ def format_comparison(cmp: ComparisonReport) -> str:
 
 
 def format_suite_report(report: SuiteReport) -> str:
+    rate = _pct(report.passed_count, report.total)
+    kind_counts: dict[str, int] = {}
+    for case in report.cases:
+        for kind in case.failure_kinds:
+            kind_counts[kind] = kind_counts.get(kind, 0) + 1
     lines = [
         f"eval  suite={report.suite_id}  config={report.config_name}",
-        f"pass  {report.passed_count}/{report.total}  latency={report.total_latency_ms:.1f}ms",
+        f"pass  {report.passed_count}/{report.total} ({rate})  "
+        f"latency={report.total_latency_ms:.1f}ms",
         f"docs  {report.docs_fingerprint[:16]}…",
     ]
+    if kind_counts:
+        parts = [f"{k}={kind_counts[k]}" for k in sorted(kind_counts)]
+        lines.append(f"kinds {' '.join(parts)}")
     for case in report.cases:
         mark = "ok" if case.passed else "FAIL"
         extra = ""
@@ -104,3 +116,9 @@ def format_suite_report(report: SuiteReport) -> str:
         for fail in case.failures[:3]:
             lines.append(f"        - {fail}")
     return "\n".join(lines)
+
+
+def _pct(passed: int, total: int) -> str:
+    if total <= 0:
+        return "0%"
+    return f"{round(100.0 * passed / total)}%"

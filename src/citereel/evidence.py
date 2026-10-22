@@ -73,11 +73,26 @@ def evaluate_evidence(run: Run) -> EvidenceReport:
 
 
 def _claims_with_cites(answer: str) -> list[tuple[str, list[int]]]:
+    """Split into claim sentences; attach orphan `[n]` marks to the previous claim.
+
+    Models often write ``... 14 days. [1]`` — the mark lands alone after the
+    period. Without merging, evidence checks would silently skip the claim.
+    """
     parts = [p.strip() for p in _SENTENCE.split(answer) if p and p.strip()]
     if not parts:
         parts = [answer.strip()] if answer.strip() else []
-    out: list[tuple[str, list[int]]] = []
+
+    # Merge cite-only fragments into the preceding sentence.
+    merged: list[str] = []
     for part in parts:
+        only_cites = _CITE.sub("", part).strip(" ,;:-") == ""
+        if only_cites and merged and _CITE.search(part):
+            merged[-1] = f"{merged[-1]} {part}".strip()
+        else:
+            merged.append(part)
+
+    out: list[tuple[str, list[int]]] = []
+    for part in merged:
         ns = [int(m.group(1)) for m in _CITE.finditer(part)]
         if not ns:
             continue

@@ -6,8 +6,7 @@ from citereel.ingest import load_docs
 from citereel.models import Chunk, Citation, Run, Step
 from citereel.pipeline import ask
 from citereel.retrieve import EmbeddingRetriever, KeywordRetriever, Retriever, build_retriever
-
-__version__ = "0.1.0"
+from citereel.version import __version__
 
 __all__ = [
     "Chunk",
